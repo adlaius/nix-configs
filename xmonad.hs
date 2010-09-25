@@ -5,20 +5,19 @@ import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 import XMonad.Layout.LayoutHints
 import XMonad.Layout.NoBorders
-import XMonad.Util.EZConfig (additionalKeysP)
-
+import Data.List
 
 myMouseFocus :: Bool
 myMouseFocus = False
 
 myWorkspaces :: [WorkspaceId]
-myWorkspaces = ["work", "web", "sys", "media"] ++ map show [5..7]
+myWorkspaces = ["work", "web", "sys", "a/v"] ++ map show [5..7]
 
 myModMask :: KeyMask
 myModMask = mod4Mask
 
 myBorderWidth :: Dimension
-myBorderWidth = 2
+myBorderWidth = 3
 
 myNormalBorderColor, myFocusedBorderColor :: String
 myNormalBorderColor = "gray30"
@@ -29,23 +28,30 @@ myTerminal = "gnome-terminal"
 
 myManageHook = composeAll . concat $
              [ [ manageHook gnomeConfig ]
-             , [ (className =? "Firefox" <&&> resource =? "Dialog") --> doFloat ]
-             , [ (className =? "Firefox" <&&> resource =? "Extension" <&&> title =? "Add-ons") --> doFloat ]
-             , [ className =? c --> doF (W.shift "web") | c <- myWebshifts ]
-             , [ className =? c --> doF (W.shift "media") | c <- myAVshifts ]
-             , [ className =? "Emacs" --> doF (W.shift "sys") ]
-             , [ className =? "gracket" --> doF (W.shift "work") ]
-             , [ className =? "gracket" <&&> title=? c --> doFloat | c <- myWMNames ]
-             , [ className =? float --> doFloat | float <- myFloats]
+             , [ className =? w --> doF (W.shift "work") | w <- myWorkShifts ]
+             , [ className =? w --> doF (W.shift "web")  | w <- myWebShifts ]
+             , [ className =? s --> doF (W.shift "sys")  | s <- mySysShifts ]
+             , [ className =? a --> doF (W.shift "a/v")  | a <- myAVShifts ]
+             , [ className =? c --> doFloat              | c <- myClasses ]
+             , [ resource =? r  --> doFloat              | r <- myResources ]
+             , [ title =? t     --> doFloat              | t <- myTitles ]
+             , [ fmap ( t `isInfixOf`) title --> doFloat | t <- myPartialTitleMatches ]
              ]
              where
-                myWMNames = [ "World", "Preferences", "Add-ons" ]
-                myWebshifts = [ "Firefox", "Chromium-browser" ]
-                myAVshifts = [ "VLC", "MPlayer", "Rhythmbox", "Totem" ]
-                myFloats = [ "Vlc", "Vncviewer", "Gimp", "Xmag", "Xmessage", "Guake.py", "MPlayer" ]
+                myClasses             = [ "World", "Add-ons", "Vlc", "Vncviewer", "Gimp", "Xmag"
+                                        , "Xmessage", "Guake.py", "MPlayer" ]
+                myResources           = [ "Dialog", "Extension" ]              
+                myTitles              = [ "Add-ons", "Chromium Options", "World", "Select font" ]
+                myPartialTitleMatches = [ "Preferences" ]
+
+                myWebShifts           = [ "Firefox", "Chromium-browser" ]
+                myAVShifts            = [ "VLC", "MPlayer", "Rhythmbox", "Totem" ]
+                mySysShifts           = [ "gnome-terminal", "xterm", "urxvt", "Terminal", "Emacs" ]
+                myWorkShifts          = [ "gracket" ]
+
 
 myLayouts = XMonad.Tall 1 (3/100) (1/2) |||
-            (XMonad.Mirror $ XMonad.Tall 1 (3/100) (3/4)) |||
+            (XMonad.Mirror $ XMonad.Tall 1 (3/100) (5/8)) |||
             XMonad.Full
 
 main :: IO ()
