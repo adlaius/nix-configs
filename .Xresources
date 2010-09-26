@@ -6,5 +6,6 @@ Xft.antialias: 1
 Xft.dpi: 96
 Xft.rgba: rgb
 
-Emacs*Font: Pragmata-10
-Emacs*toolBar: 0
+Emacs*Font: Pragmata-12
+Emacs.toolBar: -1
+

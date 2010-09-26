@@ -2,7 +2,6 @@ import XMonad
 import XMonad.Config.Gnome
 import XMonad.Hooks.ManageDocks
 import qualified XMonad.StackSet as W
-import qualified Data.Map        as M
 import XMonad.Layout.LayoutHints
 import XMonad.Layout.NoBorders
 import Data.List
@@ -28,20 +27,20 @@ myTerminal = "gnome-terminal"
 
 myManageHook = composeAll . concat $
              [ [ manageHook gnomeConfig ]
-             , [ className =? w --> doF (W.shift "work") | w <- myWorkShifts ]
-             , [ className =? w --> doF (W.shift "web")  | w <- myWebShifts ]
-             , [ className =? s --> doF (W.shift "sys")  | s <- mySysShifts ]
-             , [ className =? a --> doF (W.shift "a/v")  | a <- myAVShifts ]
-             , [ className =? c --> doFloat              | c <- myClasses ]
-             , [ resource =? r  --> doFloat              | r <- myResources ]
-             , [ title =? t     --> doFloat              | t <- myTitles ]
-             , [ fmap ( t `isInfixOf`) title --> doFloat | t <- myPartialTitleMatches ]
+             , [ className =? w               --> doF (W.shift "work") | w <- myWorkShifts ]
+             , [ className =? w               --> doF (W.shift "web")  | w <- myWebShifts ]
+             , [ className =? s               --> doF (W.shift "sys")  | s <- mySysShifts ]
+             , [ className =? a               --> doF (W.shift "a/v")  | a <- myAVShifts ]
+             , [ className =? c               --> doFloat              | c <- myClasses ]
+             , [ resource  =? r               --> doFloat              | r <- myResources ]
+             , [ title     =? t               --> doFloat              | t <- myTitles ]
+             , [ fmap ( t `isInfixOf` ) title --> doFloat              | t <- myPartialTitleMatches ]
              ]
              where
                 myClasses             = [ "World", "Add-ons", "Vlc", "Vncviewer", "Gimp", "Xmag"
-                                        , "Xmessage", "Guake.py", "MPlayer" ]
-                myResources           = [ "Dialog", "Extension" ]              
-                myTitles              = [ "Add-ons", "Chromium Options", "World", "Select font" ]
+                                        , "Xmessage", "MPlayer", "Awn-settings", "Gpk-update-viewer" ]
+                myResources           = [ "Dialog", "Extension", "Abp" ]              
+                myTitles              = [ "Guake!", "Add-ons", "Add to Panel", "Chromium Options", "World", "Select font" ]
                 myPartialTitleMatches = [ "Preferences" ]
 
                 myWebShifts           = [ "Firefox", "Chromium-browser" ]
@@ -50,8 +49,8 @@ myManageHook = composeAll . concat $
                 myWorkShifts          = [ "gracket" ]
 
 
-myLayouts = XMonad.Tall 1 (3/100) (1/2) |||
-            (XMonad.Mirror $ XMonad.Tall 1 (3/100) (5/8)) |||
+myLayouts = XMonad.Tall 1 (3/100) (16/10) |||
+            (XMonad.Mirror $ XMonad.Tall 1 (3/100) (16/10)) |||
             XMonad.Full
 
 main :: IO ()
