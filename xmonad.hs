@@ -20,7 +20,7 @@ myBorderWidth = 3
 
 myNormalBorderColor, myFocusedBorderColor :: String
 myNormalBorderColor = "gray30"
-myFocusedBorderColor = "orangered"
+myFocusedBorderColor = "cyan"
 
 myTerminal :: String
 myTerminal = "gnome-terminal"
@@ -39,7 +39,7 @@ myManageHook = composeAll . concat $
              where
                 myClasses             = [ "World", "Add-ons", "Vlc", "Vncviewer", "Gimp", "Xmag"
                                         , "Xmessage", "MPlayer", "Awn-settings", "Gpk-update-viewer" ]
-                myResources           = [ "Dialog", "Extension", "Abp" ]              
+                myResources           = [ "Dialog", "Extension", "Abp" ]
                 myTitles              = [ "Guake!", "Add-ons", "Add to Panel", "Chromium Options", "World", "Select font" ]
                 myPartialTitleMatches = [ "Preferences" ]
 
@@ -48,10 +48,9 @@ myManageHook = composeAll . concat $
                 mySysShifts           = [ "gnome-terminal", "xterm", "urxvt", "Terminal", "Emacs" ]
                 myWorkShifts          = [ "gracket" ]
 
-
-myLayouts = XMonad.Tall 1 (3/100) (16/10) |||
-            (XMonad.Mirror $ XMonad.Tall 1 (3/100) (16/10)) |||
-            XMonad.Full
+myLayouts = Tall 1 (3/100) 0.61803 |||
+            (Mirror $ Tall 1 (3/100) 0.61803) |||
+            Full
 
 main :: IO ()
 main = xmonad gnomeConfig {
