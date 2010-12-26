@@ -1,11 +1,11 @@
 # get the Gentoo goodies (prompt, colors, other small UI tweaks; sanitizing)
-if [ -f ~/src/bash/gentoo.bashrc ]; then
-    . ~/src/bash/gentoo.bashrc
+if [ -f ~/src/git-repos/nix-configs/gentoo-bashrc.sh ]; then
+    . ~/src/git-repos/nix-configs/gentoo-bashrc.sh
 fi
 
 # infinality freetype patches now use env. vars for configuration
-if [ -f ~/src/bash/infinality-settings.sh ]; then
-    . ~/src/bash/infinality-settings.sh
+if [ -f ~/src/git-repos/nix-configs/infinality-settings.sh ]; then
+    . ~/src/git-repos/nix-configs/infinality-settings.sh
 fi
 
 complete -cf sudo
@@ -28,6 +28,7 @@ shopt -s checkwinsize
 
 shopt -s extglob # N.B. this is required for the extract() function
 
+alias ls='ls --color=auto'
 alias ll='ls -F1A --group-directories-first --color=no'
 alias myredshift='redshift -g 1.15 -l 30.3:-96.2 -t 6650:4775 &'
 alias idle='python2 -c "from idlelib import idle"'
