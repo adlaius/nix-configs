@@ -1,19 +1,21 @@
-# Check for an interactive session
-[ -z "$PS1" ] && return
+# get the Gentoo goodies (prompt, colors, other small UI tweaks; sanitizing)
+if [ -f ~/src/bash/gentoo.bashrc ]; then
+    . ~/src/bash/gentoo.bashrc
+fi
 
-PS1="\[\033[0;34m\]\W\[\033[0m\]\[\033[1;32m\]>\[\033[0m\] "
+# infinality freetype patches now use env. vars for configuration
+if [ -f ~/src/bash/infinality-settings.sh ]; then
+    . ~/src/bash/infinality-settings.sh
+fi
 
-alias ls='ls --color=auto'
-alias grep='grep --color=auto'
-alias yum='yum --color=auto'
-alias ff='nohup firefox --no-remote -P $1 >/dev/null 2>&1 &'
-alias hgrep='history | grep'
 complete -cf sudo
+complete -cf man
 
 # Don't save repeated commands in bash history
 export HISTCONTROL="ignoredups"
 
 # Disable ^S/^Q flow control (does anyone like/use this at all?)
+# Doing this also allows us to use "C-(r|s)" a la Emacs
 stty -ixon
 
 # autocorrects cd misspellings, eg. from 'cd /sur/src/linus', shell
@@ -23,6 +25,78 @@ shopt -s cdspell
 # checks window size after command execution -> prevents wrapping
 # problems after window resize
 shopt -s checkwinsize
+
+shopt -s extglob # N.B. this is required for the extract() function
+
+alias ll='ls -F1A --group-directories-first --color=no'
+alias myredshift='redshift -g 1.15 -l 30.3:-96.2 -t 6650:4775 &'
+alias idle='python2 -c "from idlelib import idle"'
+alias idle3='python -c "from idlelib import idle"'
+alias e='emacs -nw'
+alias df="df -h"
+alias du="du -c -h"
+alias grep="grep --color=auto"
+alias mkdir="mkdir -p -v"
+alias hist="history | grep $1"
+alias openports="netstat --all --numeric --programs --inet"
+alias pg="ps -Af | grep $1"
+
+# safety features
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -I'                    # 'rm -i' prompts for every file
+alias ln='ln -i'
+alias chown='chown --preserve-root'
+alias chmod='chmod --preserve-root'
+alias chgrp='chgrp --preserve-root'
+
+export GREP_COLOR="1;31"
+export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=lcd'
+export PATH=/home/brian/bin:$PATH
+export EDITOR="emacs -nw"
+export PAGER="less"
+export VISUAL="emacs -nw"
+export http_proxy="127.0.0.1:8118"
+
+# colorize display of less(1)
+export LESS_TERMCAP_mb=$'\e[1;37m'
+export LESS_TERMCAP_md=$'\e[1;37m'
+export LESS_TERMCAP_me=$'\e[0m'
+export LESS_TERMCAP_se=$'\e[0m'
+export LESS_TERMCAP_so=$'\e[1;47;30m'
+export LESS_TERMCAP_ue=$'\e[0m'
+export LESS_TERMCAP_us=$'\e[0;36m'
+
+# colorizing less messes up env(1)'s output, so we sanitize it:
+function env() {
+  exec /usr/bin/env "$@" | grep -v ^LESS_TERMCAP_
+}
+
+function extract() {
+  local e=0 i c
+  for i; do
+    if [[ -r $i ]]; then
+        c=''
+        case $i in
+          *.t@(gz|lz|xz|b@(2|z?(2))|a@(z|r?(.@(Z|bz?(2)|gz|lzma|xz)))))
+                 c='bsdtar xvf' ;;
+          *.7z)  c='7z x'       ;;
+          *.Z)   c='uncompress' ;;
+          *.bz2) c='bunzip2'    ;;
+          *.exe) c='cabextract' ;;
+          *.gz)  c='gunzip'     ;;
+          *.rar) c='unrar x'    ;;
+          *.xz)  c='unxz'       ;;
+          *.zip) c='unzip'      ;;
+          *)     echo "$0: cannot extract \`$i': Unrecognized file extension" >&2; e=1 ;;
+        esac
+        [[ $c ]] && command $c "$i"
+    else
+        echo "$0: cannot extract \`$i': File is unreadable" >&2; e=2
+    fi
+  done
+  return $e
+}
 
 # arch linux package manager search
 alias pacs="pacsearch"
@@ -41,30 +115,6 @@ apply ()
     cmd=$1
     shift
     for x in $*; do $cmd $x; done
-}
-
-# extract various archives w/o fiddling around
-ext ()
-{
-    if [ -f $1 ] ; then
-        case $1 in
-            *.7z)        7z x $1       ;;
-            *.bz2)       bunzip2 $1    ;;
-            *.gz)        gunzip $1     ;;
-            *.rar)       rar x $1      ;;
-            *.tar.bz2)   tar xjf $1    ;;
-            *.tar.gz)    tar xzf $1    ;;
-            *.tar)       tar xf $1     ;;
-            *.tbz2)      tar xjf $1    ;;
-            *.tgz)       tar xzf $1    ;;
-	    *.xz)        xz -d $1      ;;
-            *.zip)       unzip $1      ;;
-            *.Z)         uncompress $1 ;;
-            *)           echo "'$1' cannot be extracted via extract()" ;;
-        esac
-    else
-        echo "'$1' is not a valid file"
-    fi
 }
 
 # mkmv - creates a new directory and moves the file into it, in 1 step
@@ -89,3 +139,4 @@ nh()
 {
     nohup "$@" &>/dev/null &
 }
+

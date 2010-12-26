@@ -4,6 +4,9 @@ set visible-stats on
 set horizontal-scroll-mode off
 set bell-style none
 
+# Breaking with ^C will echo that character to the terminal. This can be disabled:
+# set echo-control-characters off
+
 # By default up/down are bound to previous-history
 # and next-history respectively. The following does the
 # same but gives the extra functionality where if you
@@ -19,3 +22,39 @@ $if Bash
   #do history expansion when space entered
   Space: magic-space
 $endif
+
+
+# READLINE MACROS
+
+# Readline also supports binding keys to keyboard macros. For simple
+# example, run this command in bash:
+
+# bind '"\ew":"\C-e # macro"'
+
+# or add the part within single quotes to inputrc:
+
+# "\ew":"\C-e # macro"
+
+# Now type a line and press Alt+W. Readline will act as though Ctrl+E
+# (end-of-line) had been pressed, appended with ' # macro'.
+
+# Use any of the existing keybindings within a readline macro, which
+# can be quite useful to automate frequently used idioms. For example,
+# this one makes Ctrl+Alt+L append "| less" to the line and run it
+# (Ctrl+M is equivalent to Enter:
+
+# "\e\C-l":"\C-e | less\C-m"
+
+# The next one prefixes the line with 'yes |' when pressing
+# Ctrl+Alt+Y, confirming any yes/no question the command might ask:
+
+# "\e\C-y":"\C-ayes | \C-m"
+
+# This example wraps the line in su -c '' if Alt+S is pressed:
+
+# "\es":"\C-a su -c '\C-e'\C-m"
+
+# As a last example, quickly send a command in the background with
+# Ctrl+Alt+B, discarding all its output:
+
+# "\e\C-b":"\C-e > /dev/null 2>&1 &\C-m"
