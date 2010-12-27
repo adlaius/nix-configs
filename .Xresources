@@ -3,23 +3,24 @@ Xft.hinting: 1
 Xft.rgba: rgb
 Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
+Xft.dpi: 107
 
 XTerm*metaSendsEscape: true
 
 XTerm*FaceName: Liberation Mono
-XTerm*FaceSize: 9.4
+XTerm*FaceSize: 10
 XTerm*scrollBar: false
 XTerm*foreground: gray88
 XTerm*background: black
-XTerm*geometry: 120x45+160+0
+XTerm*geometry: 120x42+96+0
 
-emacs*font: Liberation Mono-9.5
+emacs*font: Liberation Mono-10
 ! For some reason, the following values must be "off"; setting them to
 ! "0" doesn't work, contrary to all documentation I've read.
 Emacs*verticalScrollBars: off
 emacs*toolBar: off
 ! Do not set *geometry for emacs; this will FUBAR various frames
-emacs.geometry: 110x44+160+0
+emacs.geometry: 120x41+96+0
 
 
 !! Linux Console colors
