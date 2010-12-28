@@ -1,30 +1,56 @@
 (add-to-list 'load-path "~/.emacs.d/elisp") ;; personal stuff
+(require 'generic-x) ;; generic syntax highlighting for files of unspecified type
+(autoload 'disk "disk" "Do The Right Thing(TM) with files/buffers." t)
 
-;; cf. ~/.Xresources for additional settings
-(setq inhibit-startup-message t)
-
+(setq inhibit-startup-message t) ;; cf. ~/.Xresources for additional settings
+(setq use-dialog-box nil)
 (fset 'yes-or-no-p 'y-or-n-p)
+
+;; By default, 'case-fold-search is t, which makes basic C-s searches
+;; case-insensitive. In incremental search, this can be handy. It
+;; destroys regexp searches, though. So first we draw a modeline
+;; indicator if its value is non-nil:
+(add-to-list 'minor-mode-alist '(case-fold-search " CFS"))
+
+;; Now we add a hook to isearch so we can move in/out of regexp search
+;; and case-insensitive isearch. 'isearch-edit-string allows us to
+;; edit the search string in the minibuffer.
+(add-hook 'isearch-mode-hook
+	  (function
+	   (lambda ()
+	     (define-key isearch-mode-map "\C-t" 'isearch-toggle-regexp)
+	     (define-key isearch-mode-map "\C-c" 'isearch-toggle-case-fold)
+	     (define-key isearch-mode-map "\C-j" 'isearch-edit-string))))
 
 (define-key global-map (kbd "C-w") 'backward-kill-word) ;; match GNU Readline
 (define-key global-map (kbd "C-c k") 'kill-region) ;; used to be "C-w"; find a suitable home
-(define-key global-map (kbd "M-g *") 'ffap) ;; bit of consistency w/Vim
-(define-key global-map (kbd "<f5>") 'save-buffer)
+(define-key global-map (kbd "M-g *") 'ffap) ;; find-file-at-point, a la Vim
+(define-key global-map (kbd "M-p") 'upcase-previous-word)
+
+(defun upcase-previous-word ()
+  (interactive)
+  (progn
+    (backward-word)
+    (upcase-word 1)
+    (backward-word)))
+
+(define-key global-map (kbd "<f5>") 'disk)
 (define-key global-map (kbd "<f7>") 'eval-buffer)
 
-(defvar *background-color* 'dark
-  "One of 'light or 'dark; corresponds to frame background value.")
+(defvar *background-color* (if (equal (window-system) nil) 'dark 'light)
+  "Default frame background color value; one of 'dark or 'light.")
 
 (defun toggle-colors ()
-  "Switch to/from dark background, sans color themes tomfoolery."
+  "Switch to/from dark background, sans color theme tomfoolery."
   (interactive)
   (if (equal *background-color* 'light)
       (progn
 	(set-foreground-color "gray88")
-	(set-background-color "black")
+	(set-background-color "#0c101c")  ;; #0c101c is a nice "inkpot" hue
 	(setq *background-color* 'dark))
     (progn
       (set-foreground-color "black")
-      (set-background-color "white")
+      (set-background-color "ivory")
       (setq *background-color* 'light))))
 
 (global-set-key (kbd "<f9>") 'toggle-colors)

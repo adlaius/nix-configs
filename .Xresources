@@ -5,25 +5,25 @@ Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
 Xft.dpi: 107
 
+XTerm*FaceName: Anonymous Pro:pixelsize=16
 XTerm*metaSendsEscape: true
-
-XTerm*FaceName: Inconsolata-11
-XTerm*FaceSize: 10
 XTerm*scrollBar: false
-XTerm*foreground: gray88
-XTerm*background: black
-XTerm*geometry: 120x40+96+0
+XTerm*geometry: 120x45+96+0
 
-emacs*font: Inconsolata-11
+emacs*font: Anonymous Pro:pixelsize=16
 ! For some reason, the following values must be "off"; setting them to
 ! "0" doesn't work, contrary to all documentation I've read.
 Emacs*verticalScrollBars: off
 emacs*toolBar: off
 ! Do not set *geometry for emacs; this will FUBAR various frames
-emacs.geometry: 120x40+96+0
+emacs.geometry: 120x41+96+0
+emacs.background: ivory
 
 
-!! Linux Console colors
+!Linux Console colors
+XTerm*foreground: gray88
+XTerm*background: black
+
 !black
 *color0:  #000000
 *color8:  #686868

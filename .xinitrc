@@ -4,16 +4,13 @@
 
 xrdb ~/.Xresources
 
-# obviate the need for .xmodmap jazz
-setxkbmap -option ctrl:swapcaps
-
 # C-M-BACKSPACE was removed from Xorg's default config. Put it back.
 setxkbmap -option terminate:ctrl_alt_bksp
 
-#xset fp+ ~/.fonts
-#xset fp rehash
+# load xmodmap customizations
+xmodmap ~/.xmodmap
 
-xsetroot -mod 2 2 -fg darkslategray -bg darkseagreen
+xsetroot -mod 11 6 -fg gray20 -bg black
 xsetroot -cursor_name left_ptr
 
 ck-launch-session /usr/bin/openbox-session

@@ -54,6 +54,7 @@ alias chgrp='chgrp --preserve-root'
 # work around non-UTF8-aware software
 export LANG=en_US.iso88591
 export LC_COLLATE=C
+
 export GREP_COLOR="1;31"
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=lcd'
 export PATH=/home/brian/bin:$PATH
