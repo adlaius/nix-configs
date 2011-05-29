@@ -23,7 +23,7 @@ myNormalBorderColor = "#333333"
 myFocusedBorderColor = "#f848a4"
 
 myTerminal :: String
-myTerminal = "urxvt"
+myTerminal = "xterm"
 
 myManageHook = composeAll . concat $
              [ [ manageHook gnomeConfig ]
