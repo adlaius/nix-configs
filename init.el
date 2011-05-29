@@ -1,10 +1,17 @@
 (add-to-list 'load-path "~/.emacs.d/elisp") ;; personal stuff
+(add-to-list 'load-path "~/.emacs.d/elisp/color-theme-solarized")
+;(require 'color-theme)
+;(require 'color-theme-solarized)
+(require 'haskell-mode)
+(require 'planner) ;; Planner mode!)
 (require 'generic-x) ;; generic syntax highlighting for files of unspecified type
 (autoload 'disk "disk" "Do The Right Thing(TM) with files/buffers." t)
 
 (setq inhibit-startup-message t) ;; cf. ~/.Xresources for additional settings
 (setq use-dialog-box nil)
 (fset 'yes-or-no-p 'y-or-n-p)
+(tool-bar-mode -1)
+(set-scroll-bar-mode nil)
 
 ;; By default, 'case-fold-search is t, which makes basic C-s searches
 ;; case-insensitive. In incremental search, this can be handy. It
@@ -37,24 +44,6 @@
 (define-key global-map (kbd "<f5>") 'disk)
 (define-key global-map (kbd "<f7>") 'eval-buffer)
 
-(defvar *background-color* (if (equal (window-system) nil) 'dark 'light)
-  "Default frame background color value; one of 'dark or 'light.")
-
-(defun toggle-colors ()
-  "Switch to/from dark background, sans color theme tomfoolery."
-  (interactive)
-  (if (equal *background-color* 'light)
-      (progn
-	(set-foreground-color "gray88")
-	(set-background-color "#0c101c")  ;; #0c101c is a nice "inkpot" hue
-	(setq *background-color* 'dark))
-    (progn
-      (set-foreground-color "black")
-      (set-background-color "ivory")
-      (setq *background-color* 'light))))
-
-(global-set-key (kbd "<f9>") 'toggle-colors)
-
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp/sage-mode-0.6/emacs"))
 (require 'sage "sage")
 (setq sage-command "/usr/bin/sage")
@@ -82,8 +71,9 @@
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  '(column-number-mode t)
- '(font-lock-maximum-decoration nil)
+ '(font-lock-maximum-decoration t)
  '(fringe-mode (quote (0)) nil (fringe))
  '(indicate-buffer-boundaries (quote right))
  '(show-paren-mode t)
- '(text-mode-hook (quote (turn-on-auto-fill text-mode-hook-identify))))
+ '(text-mode-hook (quote (turn-on-auto-fill text-mode-hook-identify)))
+ '(tool-bar-mode nil))

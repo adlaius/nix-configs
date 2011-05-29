@@ -1,0 +1,21 @@
+Config { font = "xft:myhook mono:weight=600:pixelsize=13"
+       , border = NoBorder
+       , borderColor = "#ffffff"
+       , bgColor = "#333333"
+       , fgColor = "grey75"
+       , position = Top
+       , lowerOnStart = True
+       , commands = [ Run Weather "KCLL" ["-t","<tempF>F, <rh>%","-L","40","-H","85","--normal","yellowgreen","--high","tomato","--low","lightblue"] 36000
+                    , Run Network "wlan0" ["-t","<dev>: <tx>KB/<rx>KB","-L","0","-H","32","--normal","yellowgreen","--high","tomato"] 30
+                    , Run Network "eth0" ["-t","<dev>: <tx>KB/<rx>KB","-L","0","-H","32","--normal","yellowgreen","--high","tomato"] 30
+                    , Run Cpu ["-L","5","-H","50","--normal","yellowgreen","--high","tomato"] 30
+		    , Run ThermalZone 0 ["-t","<temp>C"] 30
+                    , Run Memory ["-t","Mem: <usedratio>%"] 300
+                    , Run Swap [] 600
+                    , Run Com "uname" ["-r","-m"] "" 36000
+    		    , Run Date "%Y-%m-%d %H:%M" "date" 600
+                    ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = "%uname% <fc=dimgrey>|</fc> %cpu% (%thermal0%) <fc=dimgrey>|</fc> %memory% <fc=dimgrey>|</fc> %swap% <fc=dimgrey>|</fc> %wlan0% <fc=dimgrey>|</fc> %eth0%}{%KCLL% <fc=dimgrey>|</fc> <fc=grey90>%date%</fc>"
+       }

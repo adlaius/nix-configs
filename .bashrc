@@ -1,11 +1,7 @@
-# get the Gentoo goodies (prompt, colors, other small UI tweaks; sanitizing)
-if [ -f ~/src/git-repos/nix-configs/gentoo-bashrc.sh ]; then
-    . ~/src/git-repos/nix-configs/gentoo-bashrc.sh
-fi
-
-# infinality freetype patches now use env. vars for configuration
-if [ -f ~/src/git-repos/nix-configs/infinality-settings.sh ]; then
-    . ~/src/git-repos/nix-configs/infinality-settings.sh
+# Source global definitions
+# N.B. **PLEASE** read them; they seem to vary substantially between systems...
+if [ -f /etc/bashrc ]; then
+	source /etc/bashrc
 fi
 
 complete -cf sudo
@@ -22,18 +18,14 @@ stty -ixon
 # would correctly guess 'cd /usr/src/linux'
 shopt -s cdspell
 
-# checks window size after command execution -> prevents wrapping
-# problems after window resize
-shopt -s checkwinsize
-
-shopt -s extglob # N.B. this is required for the extract() function
+shopt -s extglob # This is required for the extract() function
 
 alias ls='ls --color=auto'
 alias ll='ls -F1A --group-directories-first --color=no'
-alias myredshift='redshift -g 1.15 -l 30.3:-96.2 -t 6650:4775 &'
+alias myredshift='redshift -g 1.15 -t 6500:5000 -l 30:-96'
+alias e="emacs -nw"
 alias idle='python2 -c "from idlelib import idle"'
 alias idle3='python -c "from idlelib import idle"'
-alias e='emacs -nw'
 alias df="df -h"
 alias du="du -c -h"
 alias grep="grep --color=auto"
@@ -45,7 +37,7 @@ alias pg="ps -Af | grep $1"
 # safety features
 alias cp='cp -i'
 alias mv='mv -i'
-alias rm='rm -I'                    # 'rm -i' prompts for every file
+alias rm='rm -I' # 'rm -i' prompts for every file
 alias ln='ln -i'
 alias chown='chown --preserve-root'
 alias chmod='chmod --preserve-root'
@@ -56,11 +48,12 @@ export LANG=en_US.iso88591
 export LC_COLLATE=C
 
 export GREP_COLOR="1;31"
-export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=lcd'
+# options: off, on, gasp, lcd
+export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
 export PATH=/home/brian/bin:$PATH
 export EDITOR="emacs -nw"
 export PAGER="less"
-export VISUAL="emacs -nw"
+export VISUAL="emacs"
 export http_proxy="127.0.0.1:8118"
 
 # colorize display of less(1)
@@ -71,6 +64,24 @@ export LESS_TERMCAP_se=$'\e[0m'
 export LESS_TERMCAP_so=$'\e[1;47;30m'
 export LESS_TERMCAP_ue=$'\e[0m'
 export LESS_TERMCAP_us=$'\e[0;36m'
+
+tooLong () 
+{
+    pfad="`pwd`"
+    if [[ ${#pfad} -lt 30 ]]; then
+        echo -n "${pfad/\/home\/$USER/~}"
+    else 
+        echo -n "<...> /`basename "$pfad"`"
+    fi
+}
+
+# orginal Arch Prompt
+# PS1='[\u@\h \W]\$ '
+PS1="\[\033[40;1;33m\]\$(tooLong)\$\[\033[0m\] "
+
+if [[ $UID == 0 ]]; then
+    PS1="\[\033[1;41m\]\$(tooLong)#\[\033[00m\] "
+fi
 
 # colorizing less messes up env(1)'s output, so we sanitize it:
 function env() {
@@ -103,45 +114,36 @@ function extract() {
   return $e
 }
 
-# arch linux package manager search
-alias pacs="pacsearch"
-pacsearch ()
-{
-       echo -e "$(pacman -Ss $@ | sed \
-       -e 's#core/.*#\\033[1;31m&\\033[0;37m#g' \
-       -e 's#extra/.*#\\033[0;32m&\\033[0;37m#g' \
-       -e 's#community/.*#\\033[1;35m&\\033[0;37m#g' \
-       -e 's#^.*/.* [0-9].*#\\033[0;36m&\\033[0;37m#g' )"
-}
-
 # apply a simple command to multiple args
-apply ()
-{
+function apply() {
     cmd=$1
     shift
     for x in $*; do $cmd $x; done
 }
 
+# mkgo - create a new directory and cd into it
+# NOTE: calling this function "mkcd" causes the function to fail, as mkdir seems to be passed an empty string. 
+function mkgo() {
+    mkdir "$1"
+    cd "$1"
+}
+
 # mkmv - creates a new directory and moves the file into it, in 1 step
 # Usage: mkmv <file> <directory>
-mkmv()
-{
+function mkmv() {
     mkdir "$2"
     mv "$1" "$2"
 }
 
 # sanitize - set file/directory owner and permissions to normal values (644/755)
 # Usage: sanitize <file>
-sanitize()
-{
+function sanitize() {
     chmod -R u=rwX,go=rX "$@"
     chown -R ${USER}.users "$@"
 }
 
 # nh - run command detached from terminal and without output
 # Usage: nh <command>
-nh()
-{
+function nh() {
     nohup "$@" &>/dev/null &
 }
-

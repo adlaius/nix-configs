@@ -10,8 +10,8 @@ setxkbmap -option terminate:ctrl_alt_bksp
 # load xmodmap customizations
 xmodmap ~/.xmodmap
 
-xsetroot -mod 11 6 -fg gray20 -bg black
-xsetroot -cursor_name left_ptr
+#xsetroot -mod 11 6 -fg gray20 -bg black
+#xsetroot -cursor_name left_ptr
 
-ck-launch-session /usr/bin/openbox-session
+ck-launch-session gnome-session
 

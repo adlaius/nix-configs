@@ -35,7 +35,8 @@
 # Default:     [Freetype's default]
 # Recommended: "0.11 0.22 0.38 0.22 0.11"
 
-export INFINALITY_FT_FILTER_PARAMS="0.11 0.22 0.38 0.22 0.11" # (smooth, extra weight)
+#export INFINALITY_FT_FILTER_PARAMS="0.11 0.22 0.38 0.22 0.11" # (smooth, extra weight)
+export INFINALITY_FT_FILTER_PARAMS="0.20 0.20 0.30 0.20 0.20" # (extra smooth, extra weight)
 
 # INFINALITY_FT_STEM_ALIGNMENT_TYPE
 # This performs analysis on each glyph and determines the best
@@ -62,7 +63,7 @@ export INFINALITY_FT_FILTER_PARAMS="0.11 0.22 0.38 0.22 0.11" # (smooth, extra w
 # Default:     none
 # Recommended: medium
 
-export INFINALITY_FT_STEM_ALIGNMENT_TYPE=slight
+export INFINALITY_FT_STEM_ALIGNMENT_TYPE=none
 
 
 # INFINALITY_FT_AUTOFIT_STEM_SNAP_LIGHT
@@ -80,7 +81,7 @@ export INFINALITY_FT_STEM_ALIGNMENT_TYPE=slight
 # Default:     false
 # Recommended: true
 
-export INFINALITY_FT_AUTOFIT_STEM_SNAP_LIGHT=true
+export INFINALITY_FT_AUTOFIT_STEM_SNAP_LIGHT=false
 
 
 # INFINALITY_FT_AUTOFIT_EMBOLDEN_LIGHT
@@ -120,7 +121,7 @@ export INFINALITY_FT_AUTOFIT_EMBOLDEN_LIGHT=true
 # Default:     [No gamma correction]
 # Recommended: "9 .5"
 
-export INFINALITY_FT_PSEUDO_GAMMA="18 .4"
+export INFINALITY_FT_PSEUDO_GAMMA="50 .4"
 
 # INFINALITY_FT_AUTOFIT_ADJUST_HEIGHTS
 #
@@ -135,7 +136,7 @@ export INFINALITY_FT_PSEUDO_GAMMA="18 .4"
 #
 # Default:     false
 
-export INFINALITY_FT_AUTOFIT_ADJUST_HEIGHTS=true
+export INFINALITY_FT_AUTOFIT_ADJUST_HEIGHTS=false
 
 
 # INFINALITY_FT_ENHANCED_EMBOLDEN
@@ -181,3 +182,4 @@ export INFINALITY_FT_EMBOLDEN_MAINTAIN_WIDTH=true
 # Recommended: true
 
 export INFINALITY_FT_AUTO_AUTOHINT=true
+

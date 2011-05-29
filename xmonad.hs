@@ -16,14 +16,14 @@ myModMask :: KeyMask
 myModMask = mod4Mask
 
 myBorderWidth :: Dimension
-myBorderWidth = 3
+myBorderWidth = 2
 
 myNormalBorderColor, myFocusedBorderColor :: String
-myNormalBorderColor = "gray30"
-myFocusedBorderColor = "cyan"
+myNormalBorderColor = "#333333"
+myFocusedBorderColor = "#f848a4"
 
 myTerminal :: String
-myTerminal = "gnome-terminal"
+myTerminal = "urxvt"
 
 myManageHook = composeAll . concat $
              [ [ manageHook gnomeConfig ]

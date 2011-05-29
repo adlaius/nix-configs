@@ -1,26 +1,23 @@
 ! -*- Conf-Xdefaults -*-
 
-! Swap Caps_Lock and Control_L
-! remove Lock = Caps_Lock
-! remove Control = Control_L
-! keysym Control_L = Caps_Lock
-! keysym Caps_Lock = Control_L
-! add Lock = Caps_Lock
-! add Control = Control_L
-
-! Swap Control and Alt keys
+! Make Alt keys Control, Capslock Alt_L
 clear control
 clear mod1
+clear lock
 keycode 64 = Control_L
-keycode 37= Alt_L
-keycode 105 = Alt_R
+keycode 66 = Alt_L
 keycode 108 = Control_R
 add control = Control_L Control_R
-add mod1 = Alt_L Alt_R
+add mod1 = Alt_L
 
-! keycode 37 is by default Control_L
-! keycode 64 is by default Alt_L
-! keycode 66 is by default Caps Lock
-! keycode 105 is by default Control_R
-! keycode 108 is by default Alt_R
-!keycode 66 = Print
+! The following is said to work on Win32 via AutoHotKeys (untested)
+! LCtrl::LWin
+! LWin::LAlt
+! LAlt::LCtrl
+
+! RAlt::RCtrl
+! RWin::RAlt
+! AppsKey::RAlt
+! RCtrl::AppsKey
+! *Tab::Send {Blind}{Tab}
+
