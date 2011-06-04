@@ -1,8 +1,7 @@
+(setq backup-directory-alist '(("" . "~/.emacs.d/backup_files")))
 (add-to-list 'load-path "~/.emacs.d/elisp") ;; personal stuff
 (add-to-list 'load-path "~/.emacs.d/elisp/color-theme-solarized")
-;(require 'color-theme)
-;(require 'color-theme-solarized)
-(require 'haskell-mode)
+(global-subword-mode 1) ;; movement through CamelCase words
 (require 'planner) ;; Planner mode!)
 (require 'generic-x) ;; generic syntax highlighting for files of unspecified type
 (autoload 'disk "disk" "Do The Right Thing(TM) with files/buffers." t)

@@ -1,9 +1,9 @@
 Xft.antialias: 1
 Xft.hinting: 1
-Xft.hintstyle: hintslight
+Xft.hintstyle: hintfull
 Xft.lcdfilter: lcddefault
 Xft.dpi: 96
-Xft.rgba: rgb
+Xft.rgba: none
 
 XTerm*metaSendsEscape: true
 XTerm*scrollBar: false
