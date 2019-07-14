@@ -12,9 +12,9 @@
                   (toggle-frame-maximized)
                   (set-window-fringes nil 150 150 nil)
                   (set-face-attribute 'default nil :family "Triplicate T4c")
-                  (set-face-attribute 'default nil :height 150)
-                  (if (file-exists-p "./minimal-theme.el")
-                      (load-file "minimal-theme.el"))))))
+                  (set-face-attribute 'default nil :height 135)
+                  (if (file-exists-p "./theme.el")
+                      (load-file "theme.el"))))))
 
 (let ((default-directory  "~/Source/Repos/elisp/"))
   (normal-top-level-add-subdirs-to-load-path))
@@ -39,7 +39,7 @@ There are two things you can do about this warning:
 
 (defvar my-packages
   '(deft magit better-defaults parinfer dash-functional rdf-prefix
-     sparql-mode ttl-mode yasnippet which-key schrute csv-mode helpful
+     sparql-mode ttl-mode yasnippet which-key move-text schrute csv-mode helpful
      helm helm-ag helm-slime helm-systemd helm-wordnet helm-xref))
 (dolist (p my-packages)
   (unless (package-installed-p p)
@@ -60,15 +60,32 @@ There are two things you can do about this warning:
         '("\\.ttl" . ttl-mode))
        auto-mode-alist))
 
+(require 'better-defaults)
+(require 'move-text)
+
 (load-library "dash")
 (load-library "dash-functional")
 (eval-after-load 'dash '(dash-enable-font-lock))
 
 (require 'helm-config)
 (helm-mode)
+(require 'eldoc)
 (require 'which-key)
 (which-key-mode)
 (require 'deft)
+
+(setq deft-extensions '("txt" "tex" "org" "md"))
+(cond ((eq system-type 'windows-nt) (setq deft-directory "~/../../Dropbox/notes"))
+      ((setq deft-directory "~/Dropbox/notes")))
+(setq deft-recursive t)
+;; this is the default but it duplicates the first line when
+;; deft-use-filename-as-title is nil
+(setq deft-strip-summary-regexp
+      (concat "\\("
+           "[\n\t]" ;; blank
+           "\\|^#\\+[[:upper:]_]+:.*$" ;; org-mode metadata
+           "\\)"))
+(global-set-key [f8] 'deft)
 
 ;; helm-ify All The Things(TM)
 (global-set-key (kbd "C-x C-f") 'helm-find-files) ;; was 'ido-find-file
@@ -119,6 +136,7 @@ There are two things you can do about this warning:
 (setq inhibit-startup-message t
       tool-bar-mode nil
       show-paren-mode t
+      blink-matching-paren 'jump-offscreen
       scroll-bar-mode nil
       size-indication-mode t
       column-number-mode t
@@ -136,6 +154,9 @@ There are two things you can do about this warning:
 (add-hook 'outline-minor-mode-hook
           (lambda () (local-set-key '[right]
                                outline-show-entry)))
+
+(add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
+
 (defun sort-words (reverse beg end)
   "Sort words in region alphabetically, in REVERSE if negative.
     Prefixed with negative \\[universal-argument], sorts in reverse.
@@ -184,6 +205,18 @@ will unset 'selective-display' by setting it to 0."
 
 (setq slime-contribs '(slime-fancy))
 (add-to-list 'slime-contribs 'slime-repl)
+
+(org-babel-do-load-languages
+      'org-babel-load-languages
+      '((clojure . t))
+      '((sparql . t)))
+
+(defun cargo-test ()
+  "Compile using `cargo test`"
+  (interactive)
+  (re-search-backward "^fn ")
+  (forward-word 2)
+  (compile (concat "cargo test " (current-word) " -- --nocapture")))
 
 (setq prettify-symbols-alist
       ;; other chars are super buggy - fix someday...
