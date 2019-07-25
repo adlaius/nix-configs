@@ -208,8 +208,9 @@ will unset 'selective-display' by setting it to 0."
 
 (org-babel-do-load-languages
       'org-babel-load-languages
-      '((clojure . t))
-      '((sparql . t)))
+      '((clojure . t)
+        (scheme . t)
+        (sparql . t)))
 
 (defun cargo-test ()
   "Compile using `cargo test`"
