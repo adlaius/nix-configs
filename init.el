@@ -1,25 +1,12 @@
 ;; tips are now filed in emacs-tips.el
 (prefer-coding-system 'utf-8)
 
-;; spruce things up a bit
-;; N.B. initial frame created before init is loaded;
-;; try adding a hook for 'after-init-hook
-;; also cf https://github.com/jwiegley/use-package
-(add-hook 'after-make-frame-functions
-          (lambda ()
-            (if (display-graphic-p)
-                (progn
-                  (toggle-frame-maximized)
-                  (set-window-fringes nil 150 150 nil)
-                  (set-face-attribute 'default nil :family "Triplicate T4c")
-                  (set-face-attribute 'default nil :height 135)
-                  (if (file-exists-p "./theme.el")
-                      (load-file "theme.el"))))))
+;; "foreground" and "background" are the opposite of what you think here
+(set-face-foreground 'mode-line "black")
+(set-face-background 'mode-line "white")
 
-(let ((default-directory  "~/Source/Repos/elisp/"))
+(let ((default-directory  "~/Source/Repos/lisp/"))
   (normal-top-level-add-subdirs-to-load-path))
-
-(require 'package)
 
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
                     (not (gnutls-available-p))))
@@ -35,12 +22,13 @@ There are two things you can do about this warning:
   (when (< emacs-major-version 24) ;; For important compatibility libraries like cl-lib
     (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")))))
 
+(require 'package)
 (package-initialize)
 
 (defvar my-packages
   '(deft magit better-defaults parinfer dash-functional rdf-prefix
-     sparql-mode ttl-mode yasnippet which-key move-text schrute csv-mode helpful
-     helm helm-ag helm-slime helm-systemd helm-wordnet helm-xref))
+     sparql-mode ttl-mode yasnippet which-key move-text csv-mode helpful
+     helm helm-slime helm-systemd helm-wordnet helm-xref))
 (dolist (p my-packages)
   (unless (package-installed-p p)
     (package-install p)))
@@ -65,7 +53,7 @@ There are two things you can do about this warning:
 
 (load-library "dash")
 (load-library "dash-functional")
-(eval-after-load 'dash '(dash-enable-font-lock))
+(eval-after-load 'dash '(dash-enable-font-lock)) 
 
 (require 'helm-config)
 (helm-mode)
@@ -142,19 +130,6 @@ There are two things you can do about this warning:
       column-number-mode t
       ring-bell-function 'ignore)
 
-(add-hook 'outline-mode-hook
-          (lambda () (local-set-key '[left]
-                               outline-hide-entry)))
-(add-hook 'outline-mode-hook
-          (lambda () (local-set-key '[right]
-                               outline-show-entry)))
-(add-hook 'outline-minor-mode-hook
-          (lambda () (local-set-key '[left]
-                               outline-hide-entry)))
-(add-hook 'outline-minor-mode-hook
-          (lambda () (local-set-key '[right]
-                               outline-show-entry)))
-
 (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
 
 (defun sort-words (reverse beg end)
@@ -186,8 +161,6 @@ the Unicode charts, you should set it to 16."
   (interactive (list (read-quoted-char "Char: ")))
   (insert-char char))
 
-(global-set-key (kbd "<f5>") 'set-selective-display-dlw)
-
 (defun set-selective-display-dlw (&optional level)
   "Fold text indented same of more than the cursor.
 If level is set, set the indent level to LEVEL. If
@@ -197,6 +170,8 @@ will unset 'selective-display' by setting it to 0."
   (if (eq selective-display (1+ (current-column)))
       (set-selective-display 0)
     (set-selective-display (or level (1+ (current-column))))))
+
+(global-set-key (kbd "<f5>") 'set-selective-display-dlw)
 
 (cond
  ((eq system-type 'darwin) (setq inferior-lisp-program "/opt/bin/ccl"))
@@ -208,7 +183,10 @@ will unset 'selective-display' by setting it to 0."
 
 (org-babel-do-load-languages
       'org-babel-load-languages
-      '((clojure . t)
+      '((erlang . t)
+	(elixir . t)
+	(ocaml . t)
+	(clojure . t)
         (scheme . t)
         (sparql . t)))
 
@@ -225,14 +203,3 @@ will unset 'selective-display' by setting it to 0."
       '(("lambda" . 955)))
 (prettify-symbols-mode 1)
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (helpful csv-mode schrute which-key yasnippet magit
-             better-defaults ttl-mode sparql-mode rdf-prefix parinfer
-             helm-xref helm-wordnet helm-systemd helm-slime helm-ag deft
-             dash-functional))))
