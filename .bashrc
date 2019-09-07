@@ -27,6 +27,10 @@ alias chown='chown --preserve-root'
 alias chmod='chmod --preserve-root'
 alias chgrp='chgrp --preserve-root'
 
+# add personal bin dir to path
+PATH=$HOME/bin:$PATH
+export PATH
+
 # kerl completion stuff
 source "$HOME/.bash_completion"
 
