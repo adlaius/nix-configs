@@ -8,6 +8,13 @@
 (let ((default-directory  "~/Source/Repos/lisp/"))
   (normal-top-level-add-subdirs-to-load-path))
 
+;; cf https://debbugs.gnu.org/34341
+;; verify if fixed in 26.3+
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+
+(require 'package)
+(package-initialize)
+
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
                     (not (gnutls-available-p))))
        (proto (if no-ssl "http" "https")))
@@ -22,11 +29,8 @@ There are two things you can do about this warning:
   (when (< emacs-major-version 24) ;; For important compatibility libraries like cl-lib
     (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")))))
 
-(require 'package)
-(package-initialize)
-
 (defvar my-packages
-  '(deft magit better-defaults parinfer dash-functional rdf-prefix
+  '(deft magit better-defaults elixir-mode lsp-mode yasnippet parinfer dash-functional rdf-prefix
      sparql-mode ttl-mode yasnippet which-key move-text csv-mode helpful
      helm helm-slime helm-systemd helm-wordnet helm-xref))
 (dolist (p my-packages)
@@ -60,6 +64,16 @@ There are two things you can do about this warning:
 (require 'eldoc)
 (require 'which-key)
 (which-key-mode)
+(require 'yasnippet)
+
+(require 'lsp-mode)
+(require 'lsp-ui)
+(require 'company-lsp)
+(push 'company-lsp company-backends)
+(add-hook 'lsp-mode-hook 'lsp-ui-mode)
+(add-hook 'elixir-mode-hook #'lsp)
+(add-hook 'elixir-mode-hook 'flycheck-mode)
+
 (require 'deft)
 
 (setq deft-extensions '("txt" "tex" "org" "md"))
@@ -183,8 +197,7 @@ will unset 'selective-display' by setting it to 0."
 
 (org-babel-do-load-languages
       'org-babel-load-languages
-      '((erlang . t)
-	(elixir . t)
+      '((elixir . t)
 	(ocaml . t)
 	(clojure . t)
         (scheme . t)
