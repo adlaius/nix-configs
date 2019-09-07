@@ -30,9 +30,10 @@ There are two things you can do about this warning:
     (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")))))
 
 (defvar my-packages
-  '(deft magit better-defaults elixir-mode lsp-mode yasnippet parinfer dash-functional rdf-prefix
-     sparql-mode ttl-mode yasnippet which-key move-text csv-mode helpful
-     helm helm-slime helm-systemd helm-wordnet helm-xref))
+  '(better-defaults company company-lsp csv-mode dash-functional deft
+     elixir-mode flycheck helm helm-slime helm-systemd helm-wordnet
+     helm-xref helpful lsp-mode lsp-ui magit move-text parinfer
+     rdf-prefix sparql-mode ttl-mode which-key yasnippet))
 (dolist (p my-packages)
   (unless (package-installed-p p)
     (package-install p)))
@@ -146,16 +147,21 @@ There are two things you can do about this warning:
 
 (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
 
+;; enhanced thanks to https://emacs.stackexchange.com/a/7550
 (defun sort-words (reverse beg end)
   "Sort words in region alphabetically, in REVERSE if negative.
-    Prefixed with negative \\[universal-argument], sorts in reverse.
+Prefixed with negative \\[universal-argument], sorts in reverse.
 
-    The variable `sort-fold-case' determines whether alphabetic case
-    affects the sort order.
+The variable `sort-fold-case' determines whether alphabetic case
+affects the sort order. See `sort-regexp-fields'.
 
-    See `sort-regexp-fields'."
+Temporarily consider - and _ characters as part of the word when sorting."
   (interactive "*P\nr")
-  (sort-regexp-fields reverse "\\w+" "\\&" beg end))
+  (let ((temp-table (copy-syntax-table text-mode-syntax-table)))
+    (with-syntax-table temp-table
+      (modify-syntax-entry ?- "w" temp-table)
+      (modify-syntax-entry ?_ "w" temp-table)
+      (sort-regexp-fields reverse "\\w+" "\\&" beg end))))
 
 (if (eq window-system 'ns)
     (setq ns-mwheel-line-height 1
